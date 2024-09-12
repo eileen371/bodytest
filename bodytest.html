@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>体测成绩计算器(6年级)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        input,select {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .input-group select {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 50%;
+        }
+        
+        .input-group input {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+        .warning {
+            color: red;
+            font-size: 0.9em;
+        }
+        .individual-score {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>体测成绩计算器(6年级)</h1>
+
+        <label for="gender">选择性别:</label>
+        <select id="gender">
+            <option value="female">女生</option>
+            <option value="male">男生</option>
+        </select>
+
+        <!-- BMI -->
+        <label for="B_option">(1) BMI:</label>
+         <div class="warning" id="warning_B"></div>
+         <div class="individual-score" id="score_B"></div>
+         <div class="input-group">
+            <select id="B_option" onchange="toggleBMIInput()">
+                <option value="score">输入得分</option>
+                <option value="result">输入体测结果</option>
+            </select>
+            <input type="number" id="BMI_score" placeholder="输入BMI得分" style="display: block;">
+            <input type="number" id="BMI_result_height" placeholder="输入身高（厘米）" style="display: none;">
+            <input type="number" id="BMI_result_weight" placeholder="输入体重（公斤）" style="display: none;">
+        </div>
+        
+
+        <!-- 肺活量 -->
+        <label for="F_option">(2) 肺活量:</label>
+        <div class="warning" id="warning_F"></div>
+        <div class="individual-score" id="score_F"></div>
+        <div class="input-group">
+            <select id="F_option" onchange="toggleInput('F_option', 'F_score', 'F_result')">
+                <option value="score">输入得分</option>
+                <option value="result">输入体测结果</option>
+            </select>
+            <input type="number" id="F_score" placeholder="输入肺活量得分">
+            <input type="number" id="F_result" placeholder="输入肺活量体测结果" style="display:none;">
+        </div>
+        
+
+        <!-- 坐位体前屈 -->
+        <label for="Q_option">(3) 坐位体前屈 (厘米):</label>
+        <div class="warning" id="warning_Q"></div>
+        <div class="individual-score" id="score_Q"></div>
+        <div class="input-group">
+            <select id="Q_option" onchange="toggleInput('Q_option', 'Q_score', 'Q_result')">
+                <option value="result">输入体测结果</option>
+                <option value="score">输入得分</option>
+            </select>
+            <input type="number" id="Q_score" placeholder="输入坐位体前屈得分" style="display:none;">
+            <input type="number" id="Q_result" placeholder="输入坐位体前屈体测结果" >
+        </div>
+
+        <!-- 一分钟跳绳 -->
+        <label for="T_option">(4) 一分钟跳绳 (次数):</label>
+        <div class="warning" id="warning_T"></div>
+        <div class="individual-score" id="score_T"></div>
+        <div class="input-group">
+            <select id="T_option" onchange="toggleInput('T_option', 'T_score', 'T_result')">
+                <option value="result">输入体测结果</option>
+                <option value="score">输入得分</option>
+            </select>
+            <input type="number" id="T_score" placeholder="输入跳绳得分" style="display:none;">
+            <input type="number" id="T_result" placeholder="输入跳绳体测结果" > 
+        </div>
+        
+
+        <!-- 仰卧起坐 -->
+        <label for="Z_option">(5) 仰卧起坐 (次数):</label>
+        <div class="warning" id="warning_Z"></div>
+        <div class="individual-score" id="score_Z"></div>
+        <div class="input-group">
+            <select id="Z_option" onchange="toggleInput('Z_option', 'Z_score', 'Z_result')">
+                <option value="result">输入体测结果</option>
+                <option value="score">输入得分</option>
+            </select>
+            <input type="number" id="Z_score" placeholder="输入仰卧起坐得分" style="display:none;">
+            <input type="number" id="Z_result" placeholder="输入仰卧起坐体测结果" >
+        </div>
+
+        <!-- 50米跑 -->
+        <label for="P_option">(6) 50米跑 (秒):</label>
+        <div class="warning" id="warning_P"></div>
+        <div class="individual-score" id="score_P"></div>
+        <div class="input-group">
+            <select id="P_option" onchange="toggleInput('P_option', 'P_score', 'P_result')">
+                <option value="score">输入得分</option>
+                <option value="result">输入体测结果</option>
+            </select>
+            <input type="number" id="P_score" placeholder="输入50米跑得分">
+            <input type="number" id="P_result" placeholder="输入50米跑体测结果" style="display:none;">
+        </div>
+
+        <!-- 50米*8往返跑 -->
+        <label for="P8_option">(7) 50米*8往返跑 (秒):</label>
+        <div class="warning" id="warning_P8"></div>
+        <div class="individual-score" id="score_P8"></div>
+        <div class="input-group">
+            <select id="P8_option" onchange="toggleInput('P8_option', 'P8_score', 'P8_result')">
+                <option value="score">输入得分</option>
+                <option value="result">输入体测结果</option>
+            </select>
+            <input type="number" id="P8_score" placeholder="输入50米*8往返跑得分">
+            <input type="number" id="P8_result" placeholder="输入50米*8往返跑体测结果" style="display:none;">
+        </div>
+
+        <button onclick="calculateTotalScore()">计算总成绩</button>
+        <div class="result" id="result"></div>
+        <div class="individual-score" id="calculationProcess"></div>
+    </div>
+
+    <script>
+
+        function toggleBMIInput() {
+            const B_option = document.getElementById('B_option').value;
+            if (B_option === 'score') {
+                document.getElementById('BMI_score').style.display = 'block';
+                document.getElementById('BMI_result_height').style.display = 'none';
+                document.getElementById('BMI_result_weight').style.display = 'none';
+            } else {
+                document.getElementById('BMI_score').style.display = 'none';
+                document.getElementById('BMI_result_height').style.display = 'block';
+                document.getElementById('BMI_result_weight').style.display = 'block';
+            }
+        }
+
+        function calculateBMI(height, weight) {
+            return weight*100*100 / (height * height);
+        }
+
+        function getBMIScore(gender, bmi) {
+            if (gender === 'female') {
+                // 女生的BMI评分规则
+                if (bmi > 23.6) {
+                    return 60; // BMI高于23.7得60分
+                } else if (bmi > 20.8 && bmi <= 23.6) {
+                    return 80; // BMI在20.9到23.6之间得80分
+                } else if (bmi >= 14.2 && bmi <= 20.8) {
+                    return 100; // BMI在14.2到20.8之间得100分
+                } else if (bmi < 14.2 ) {
+                    return 80; // BMI小于14.2得80分
+                }
+            } else {
+                // 男生的BMI评分规则
+                if (bmi > 24.5) {
+                    return 60; // BMI高于24.6得60分
+                } else if (bmi > 21.8 && bmi <= 24.5) {
+                    return 80; // BMI在21.9到24.5之间得80分
+                } else if (bmi >= 14.7 && bmi <= 21.8) {
+                    return 100; // BMI在14.7到21.8之间得100分
+                } else if (bmi < 14.7) {
+                    return 80; // BMI小于14.7得80分
+                }
+            }
+            return 0; // 如果不在任何区间内，返回0分
+        }
+
+        function toggleInput(selectId, scoreInputId, resultInputId) {
+            const selectValue = document.getElementById(selectId).value;
+            if (selectValue === 'score') {
+                document.getElementById(scoreInputId).style.display = 'block';
+                document.getElementById(resultInputId).style.display = 'none';
+            } else {
+                document.getElementById(scoreInputId).style.display = 'none';
+                document.getElementById(resultInputId).style.display = 'block';
+            }
+        }
+
+        function getScoreFromResult(value, ranges) {
+            for (let i = 0; i < ranges.length; i++) {
+                if (value >= ranges[i].min && value <= ranges[i].max) {
+                    return ranges[i].score;
+                }
+            }
+            return 0; // 如果分数超出范围，返回0分
+        }
+
+        function calculateTotalScore() {
+            // 获取用户输入的性别
+            let gender = document.getElementById('gender').value;
+
+            
+
+            // 定义评分标准（男生和女生）
+            const ranges_F_male = [
+                {min: 3200, max: Infinity, score: 100},
+                {min: 3100, max: 3199, score: 95},
+                {min: 3000, max: 3099, score: 90},
+                {min: 2750, max: 2999, score: 85},
+                {min: 2500, max: 2749, score: 80},
+                {min: 2400, max: 2499, score: 78},
+                {min: 2300, max: 2399, score: 76},
+                {min: 2200, max: 2299, score: 74},
+                {min: 2100, max: 2199, score: 72},
+                {min: 2000, max: 2099, score: 70},
+                {min: 1900, max: 1999, score: 68},
+                {min: 1800, max: 1899, score: 66},
+                {min: 1700, max: 1799, score: 64},
+                {min: 1600, max: 1699, score: 62},
+                {min: 1500, max: 1599, score: 60},
+                {min: 1410, max: 1499, score: 50},
+                {min: 1320, max: 1409, score: 40},
+                {min: 1230, max: 1319, score: 30},
+                {min: 1140, max: 1229, score: 20},
+                {min: 1050, max: 1139, score: 10}
+            ];
+
+            const ranges_F_female = [
+                {min: 2500, max: Infinity, score: 100}, 
+                {min: 2400, max: 2499, score: 95},
+                {min: 2300, max: 2399, score: 90}, 
+                {min: 2200, max: 2299, score: 85},
+                {min: 2100, max: 2199, score: 80}, 
+                {min: 2010, max: 2099, score: 78},
+                {min: 1920, max: 2009, score: 76}, 
+                {min: 1830, max: 1919, score: 74},
+                {min: 1740, max: 1829, score: 72}, 
+                {min: 1650, max: 1739, score: 70},
+                {min: 1560, max: 1649, score: 68}, 
+                {min: 1470, max: 1559, score: 66},
+                {min: 1380, max: 1469, score: 64}, 
+                {min: 1290, max: 1379, score: 62},
+                {min: 1200, max: 1289, score: 60}, 
+                {min: 1170, max: 1199, score: 50},
+                {min: 1140, max: 1169, score: 40}, 
+                {min: 1110, max: 1139, score: 30},
+                {min: 1080, max: 1109, score: 20}, 
+                {min: 1050, max: 1079, score: 10}
+            ];
+
+ 
+
+            const ranges_Q_male = [
+                {min: 16.6, max: Infinity, score: 100},
+                {min: 15.3, max: 16.5, score: 95},
+                {min: 14.0, max: 15.2, score: 90},
+                {min: 11.5, max: 13.9, score: 85},
+                {min: 9, max: 11.4, score: 80},
+                {min: 7.7, max: 8.9, score: 78},
+                {min: 6.4, max: 7.6, score: 76},
+                {min: 5.1, max: 6.3, score: 74},
+                {min: 3.8, max: 5.0, score: 72},
+                {min: 2.5, max: 3.7, score: 70},
+                {min: 1.2, max: 2.4, score: 68},
+                {min: -0.1, max: 1.1, score: 66},
+                {min: -1.4, max: -0.2, score: 64},
+                {min: -2.7, max: -1.5, score: 62},
+                {min: -4.0, max: -2.8, score: 60},
+                {min: -5.0, max: -4.1, score: 50},
+                {min: -6.0, max: -5.1, score: 40},
+                {min: -7.0, max: -6.1, score: 30},
+                {min: -8.0, max: -7.1, score: 20},
+                {min: -9.0, max: -8.1, score: 10}
+            ];
+            
+            const ranges_Q_female = [
+                {min: 19.9, max: Infinity, score: 100}, // 100分: 19.9 cm及以上
+                {min: 18.7, max: 19.8, score: 95},      // 95分: 18.7 cm到19.8 cm
+                {min: 17.5, max: 18.6, score: 90},      // 90分: 17.5 cm到18.6 cm
+                {min: 15.2, max: 17.4, score: 85},      // 85分: 15.2 cm到17.4 cm
+                {min: 12.9, max: 15.1, score: 80},      // 80分: 12.9 cm到15.1 cm
+                {min: 11.8, max: 12.8, score: 78},      // 78分: 11.8 cm到12.8 cm
+                {min: 10.7, max: 11.7, score: 76},      // 76分: 10.7 cm到11.7 cm
+                {min: 9.6, max: 10.6, score: 74},       // 74分: 9.6 cm到10.6 cm
+                {min: 8.5, max: 9.5, score: 72},        // 72分: 8.5 cm到9.5 cm
+                {min: 7.4, max: 8.4, score: 70},        // 70分: 7.4 cm到8.4 cm
+                {min: 6.3, max: 7.3, score: 68},        // 68分: 6.3 cm到7.3 cm
+                {min: 5.2, max: 6.2, score: 66},        // 66分: 5.2 cm到6.2 cm
+                {min: 4.1, max: 5.1, score: 64},        // 64分: 4.1 cm到5.1 cm
+                {min: 3.0, max: 4.0, score: 62},        // 62分: 3.0 cm到4.0 cm
+                {min: 1.9, max: 2.9, score: 60},        // 60分: 1.9 cm到2.9 cm
+                {min: 1.1, max: 1.8, score: 50},        // 50分: 1.1 cm到1.8 cm
+                {min: 0.3, max: 1.0, score: 40},        // 40分: 0.3 cm到1.0 cm
+                {min: -0.5, max: 0.2, score: 30},       // 30分: -0.5 cm到0.2 cm
+                {min: -1.3, max: -0.6, score: 20},      // 20分: -1.3 cm到-0.6 cm
+                {min: -2.1, max: -1.4, score: 10}       // 10分: -2.1 cm到-1.4 cm
+            ];
+
+            const ranges_T_male = [
+                {min: 157, max: Infinity, score: 100},
+                {min: 152, max: 156, score: 95},
+                {min: 147, max: 151, score: 90},
+                {min: 141, max: 146, score: 85},
+                {min: 136, max: 140, score: 80},
+                {min: 129, max: 135, score: 78},
+                {min: 122, max: 128, score: 76},
+                {min: 115, max: 121, score: 74},
+                {min: 108, max: 114, score: 72},
+                {min: 101, max: 107, score: 70},
+                {min: 93, max: 100, score: 68},
+                {min: 86, max: 92, score: 66},
+                {min: 79, max: 85, score: 64},
+                {min: 72, max: 78, score: 62},
+                {min: 65, max: 71, score: 60},
+                {min: 62, max: 64, score: 50},
+                {min: 59, max: 61, score: 40},
+                {min: 56, max: 58, score: 30},
+                {min: 53, max: 55, score: 20},
+                {min: 50, max: 52, score: 10}
+            ];
+
+            const ranges_T_female = [
+                {min: 166, max: Infinity, score: 100}, // 100分: 166次及以上
+                {min: 159, max: 165, score: 95},       // 95分: 159次到165次
+                {min: 152, max: 158, score: 90},       // 90分: 152次到158次
+                {min: 144, max: 151, score: 85},       // 85分: 144次到151次
+                {min: 136, max: 143, score: 80},       // 80分: 136次到143次
+                {min: 129, max: 135, score: 78},       // 78分: 129次到135次
+                {min: 122, max: 128, score: 76},       // 76分: 122次到128次
+                {min: 115, max: 121, score: 74},       // 74分: 115次到121次
+                {min: 108, max: 114, score: 72},       // 72分: 108次到114次
+                {min: 101, max: 107, score: 70},       // 70分: 101次到107次
+                {min: 94, max: 100, score: 68},        // 68分: 94次到100次
+                {min: 87, max: 93, score: 66},         // 66分: 87次到93次
+                {min: 80, max: 86, score: 64},         // 64分: 80次到86次
+                {min: 73, max: 79, score: 62},         // 62分: 73次到79次
+                {min: 66, max: 72, score: 60},         // 60分: 66次到72次
+                {min: 63, max: 65, score: 50},         // 50分: 63次到65次
+                {min: 60, max: 62, score: 40},         // 40分: 60次到62次
+                {min: 57, max: 59, score: 30},         // 30分: 57次到59次
+                {min: 54, max: 56, score: 20},         // 20分: 54次到56次
+                {min: 51, max: 53, score: 10}          // 10分: 51次到53次
+            ];
+
+            const ranges_Z_male = [
+                {min: 51, max: Infinity, score: 100}, // 100分: 51次及以上
+                {min: 48, max: 50, score: 95},        // 95分: 48次到50次
+                {min: 45, max: 46, score: 90},        // 90分: 45次到46次
+                {min: 42, max: 44, score: 85},        // 85分: 42次到44次
+                {min: 39, max: 41, score: 80},        // 80分: 39次到41次
+                {min: 37, max: 38, score: 78},        // 78分: 37次到38次
+                {min: 35, max: 36, score: 76},        // 76分: 35次到36次
+                {min: 33, max: 34, score: 74},        // 74分: 33次到34次
+                {min: 31, max: 32, score: 72},        // 72分: 31次到32次
+                {min: 29, max: 30, score: 70},        // 70分: 29次到30次
+                {min: 27, max: 28, score: 68},        // 68分: 27次到28次
+                {min: 25, max: 26, score: 66},        // 66分: 25次到26次
+                {min: 23, max: 24, score: 64},        // 64分: 23次到24次
+                {min: 21, max: 22, score: 62},        // 62分: 21次到22次
+                {min: 19, max: 20, score: 60},        // 60分: 19次到20次
+                {min: 17, max: 18, score: 50},        // 50分: 17次到18次
+                {min: 15, max: 16, score: 40},        // 40分: 15次到16次
+                {min: 13, max: 14, score: 30},        // 30分: 13次到14次
+                {min: 11, max: 12, score: 20},        // 20分: 11次到12次
+                {min: 9, max: 10, score: 10}          // 10分: 9次到10次
+             ];
+              
+            const ranges_Z_female = [
+                {min: 49, max: Infinity, score: 100}, // 100分: 49次及以上
+                {min: 47, max: 48, score: 95},        // 95分: 47次到48次
+                {min: 45, max: 46, score: 90},        // 90分: 45次到46次
+                {min: 42, max: 44, score: 85},        // 85分: 42次到44次
+                {min: 39, max: 41, score: 80},        // 80分: 39次到41次
+                {min: 37, max: 38, score: 78},        // 78分: 37次到38次
+                {min: 35, max: 36, score: 76},        // 76分: 35次到36次
+                {min: 33, max: 34, score: 74},        // 74分: 33次到34次
+                {min: 31, max: 32, score: 72},        // 72分: 31次到32次
+                {min: 29, max: 30, score: 70},        // 70分: 29次到30次
+                {min: 27, max: 28, score: 68},        // 68分: 27次到28次
+                {min: 25, max: 26, score: 66},        // 66分: 25次到26次
+                {min: 23, max: 24, score: 64},        // 64分: 23次到24次
+                {min: 21, max: 22, score: 62},        // 62分: 21次到22次
+                {min: 19, max: 20, score: 60},        // 60分: 19次到20次
+                {min: 17, max: 18, score: 50},        // 50分: 17次到18次
+                {min: 15, max: 16, score: 40},        // 40分: 15次到16次
+                {min: 13, max: 14, score: 30},        // 30分: 13次到14次
+                {min: 11, max: 12, score: 20},        // 20分: 11次到12次
+                {min: 9, max: 10, score: 10}          // 10分: 9次到10次
+            ];
+
+
+         const ranges_P_male = [
+                {min: 0, max: 8.2, score: 100},     // 100分: 0秒到8.2秒
+                {min: 8.21, max: 8.3, score: 95},   // 95分: 8.21秒到8.3秒
+                {min: 8.31, max: 8.4, score: 90},   // 90分: 8.31秒到8.4秒
+                {min: 8.41, max: 8.5, score: 85},   // 85分: 8.41秒到8.5秒
+                {min: 8.51, max: 8.6, score: 80},   // 80分: 8.51秒到8.6秒
+                {min: 8.61, max: 8.8, score: 78},   // 78分: 8.61秒到8.8秒
+                {min: 8.81, max: 9.0, score: 76},   // 76分: 8.81秒到9.0秒
+                {min: 9.01, max: 9.2, score: 74},   // 74分: 9.01秒到9.2秒
+                {min: 9.21, max: 9.4, score: 72},   // 72分: 9.21秒到9.4秒
+                {min: 9.41, max: 9.6, score: 70},   // 70分: 9.41秒到9.6秒
+                {min: 9.61, max: 9.8, score: 68},   // 68分: 9.61秒到9.8秒
+                {min: 9.81, max: 10.0, score: 66},  // 66分: 9.81秒到10.0秒
+                {min: 10.01, max: 10.2, score: 64}, // 64分: 10.01秒到10.2秒
+                {min: 10.21, max: 10.4, score: 62}, // 62分: 10.21秒到10.4秒
+                {min: 10.41, max: 10.6, score: 60}, // 60分: 10.41秒到10.6秒
+                {min: 10.61, max: 10.8, score: 50}, // 50分: 10.61秒到10.8秒
+                {min: 10.81, max: 11.0, score: 40}, // 40分: 10.81秒到11.0秒
+                {min: 11.01, max: 11.2, score: 30}, // 30分: 11.01秒到11.2秒
+                {min: 11.21, max: 11.4, score: 20}, // 20分: 11.21秒到11.4秒
+                {min: 11.41, max: 11.6, score: 10} // 10分: 11.41秒到11.6秒
+            ];
+                        
+            const ranges_P_female = [
+                {min: 0, max: 8.2, score: 100},      // 100分: 0秒到8.2秒
+                {min: 8.21, max: 8.3, score: 95},    // 95分: 8.21秒到8.3秒
+                {min: 8.31, max: 8.4, score: 90},    // 90分: 8.31秒到8.4秒
+                {min: 8.41, max: 8.7, score: 85},    // 85分: 8.41秒到8.7秒
+                {min: 8.71, max: 9.0, score: 80},    // 80分: 8.71秒到9.0秒
+                {min: 9.01, max: 9.2, score: 78},    // 78分: 9.01秒到9.2秒
+                {min: 9.21, max: 9.4, score: 76},    // 76分: 9.21秒到9.4秒
+                {min: 9.41, max: 9.6, score: 74},    // 74分: 9.41秒到9.6秒
+                {min: 9.61, max: 9.8, score: 72},    // 72分: 9.61秒到9.8秒
+                {min: 9.81, max: 10.0, score: 70},   // 70分: 9.81秒到10.0秒
+                {min: 10.01, max: 10.2, score: 68},  // 68分: 10.01秒到10.2秒
+                {min: 10.21, max: 10.4, score: 66},  // 66分: 10.21秒到10.4秒
+                {min: 10.41, max: 10.6, score: 64},  // 64分: 10.41秒到10.6秒
+                {min: 10.61, max: 10.8, score: 62},  // 62分: 10.61秒到10.8秒
+                {min: 10.81, max: 11.0, score: 60},  // 60分: 10.81秒到11.0秒
+                {min: 11.01, max: 11.2, score: 50},  // 50分: 11.01秒到11.2秒
+                {min: 11.21, max: 11.4, score: 40},  // 40分: 11.21秒到11.4秒
+                {min: 11.41, max: 11.6, score: 30},  // 30分: 11.41秒到11.6秒
+                {min: 11.61, max: 11.8, score: 20},  // 20分: 11.61秒到11.8秒
+                {min: 11.81, max: 12, score: 10} // 10分: 11.81秒到12秒
+            ];
+
+        const ranges_P8_male = [
+                {min: 0, max: 90, score: 100},       // 100分: 0秒到1'30"
+                {min: 91, max: 93, score: 95},       // 95分: 1'31"到1'33"
+                {min: 94, max: 96, score: 90},       // 90分: 1'34"到1'36"
+                {min: 97, max: 99, score: 85},       // 85分: 1'37"到1'39"
+                {min: 100, max: 102, score: 80},     // 80分: 1'40"到1'42"
+                {min: 103, max: 105, score: 78},     // 78分: 1'43"到1'45"
+                {min: 106, max: 108, score: 76},     // 76分: 1'46"到1'48"
+                {min: 109, max: 111, score: 74},     // 74分: 1'49"到1'51"
+                {min: 112, max: 114, score: 72},     // 72分: 1'52"到1'54"
+                {min: 115, max: 117, score: 70},     // 70分: 1'55"到1'57"
+                {min: 118, max: 120, score: 68},     // 68分: 1'58"到2'00"
+                {min: 121, max: 123, score: 66},     // 66分: 2'01"到2'03"
+                {min: 124, max: 126, score: 64},     // 64分: 2'04"到2'06"
+                {min: 127, max: 129, score: 62},     // 62分: 2'07"到2'09"
+                {min: 130, max: 132, score: 60},     // 60分: 2'10"到2'12"
+                {min: 133, max: 136, score: 50},     // 50分: 2'13"到2'16"
+                {min: 137, max: 140, score: 40},     // 40分: 2'17"到2'20"
+                {min: 141, max: 144, score: 30},     // 30分: 2'21"到2'24"
+                {min: 145, max: 148, score: 20},     // 20分: 2'25"到2'28"
+                {min: 152, max: Infinity, score: 10} // 10分: 2'32"及以上
+            ];
+
+            const ranges_P8_female = [
+                {min: 0, max: 97, score: 100},        // 100分: 0秒到1'37"
+                {min: 98, max: 100, score: 95},       // 95分: 1'38"到1'40"
+                {min: 101, max: 103, score: 90},      // 90分: 1'41"到1'43"
+                {min: 104, max: 106, score: 85},      // 85分: 1'44"到1'46"
+                {min: 107, max: 109, score: 80},      // 80分: 1'47"到1'49"
+                {min: 110, max: 112, score: 78},      // 78分: 1'50"到1'52"
+                {min: 113, max: 115, score: 76},      // 76分: 1'53"到1'55"
+                {min: 116, max: 118, score: 74},      // 74分: 1'56"到1'58"
+                {min: 119, max: 121, score: 72},      // 72分: 1'59"到2'01"
+                {min: 122, max: 124, score: 70},      // 70分: 2'02"到2'04"
+                {min: 125, max: 127, score: 68},      // 68分: 2'05"到2'07"
+                {min: 128, max: 130, score: 66},      // 66分: 2'08"到2'10"
+                {min: 131, max: 133, score: 64},      // 64分: 2'11"到2'13"
+                {min: 134, max: 136, score: 62},      // 62分: 2'14"到2'16"
+                {min: 137, max: 139, score: 60},      // 60分: 2'17"到2'19"
+                {min: 140, max: 143, score: 50},      // 50分: 2'20"到2'23"
+                {min: 144, max: 147, score: 40},      // 40分: 2'24"到2'27"
+                {min: 148, max: 151, score: 30},      // 30分: 2'28"到2'31"
+                {min: 152, max: 155, score: 20},      // 20分: 2'32"到2'35"
+                {min: 159, max: Infinity, score: 10}  // 10分: 2'39"及以上
+            ];
+
+            // 根据性别选择相应的评分标准
+            const ranges_F = (gender === 'male') ? ranges_F_male : ranges_F_female;
+            const ranges_Q = (gender === 'male') ? ranges_Q_male : ranges_Q_female;
+            const ranges_T = (gender === 'male') ? ranges_T_male : ranges_T_female;
+            const ranges_Z = (gender === 'male') ? ranges_Z_male : ranges_Z_female;
+            const ranges_P = (gender === 'male') ? ranges_P_male : ranges_P_female;
+            const ranges_P8 = (gender === 'male') ? ranges_P8_male : ranges_P8_female;
+
+            // 计算各项得分
+            let score_B, score_F, score_Q, score_T, score_Z, score_P, score_P8;
+
+            // 获取BMI得分
+            // let score_B;
+            if (document.getElementById('B_option').value === 'score') {
+                score_B = parseFloat(document.getElementById('BMI_score').value);
+                if (isNaN(score_B)) {
+                    document.getElementById('warning_B').innerText = "请输入BMI得分";
+                } else {
+                    document.getElementById('warning_B').innerText = "";
+                    document.getElementById('score_B').innerText = ""; // 清空之前的体测结果显示
+                }
+            } else {
+                let height = parseFloat(document.getElementById('BMI_result_height').value);
+                let weight = parseFloat(document.getElementById('BMI_result_weight').value);
+                if (isNaN(height) || isNaN(weight)) {
+                    document.getElementById('warning_B').innerText = "请输入正确的身高和体重";
+                    // return;
+                } else {
+                    document.getElementById('warning_B').innerText = "";
+                    let bmi = calculateBMI(height, weight);
+                    score_B = getBMIScore(gender, bmi);
+                    document.getElementById('score_B').innerText = `计算的BMI值: ${bmi.toFixed(2)}, 得分: ${score_B}`;
+                }
+            }
+
+            // 计算肺活量得分
+            if (document.getElementById('F_option').value === 'score') {
+                score_F = parseFloat(document.getElementById('F_score').value);
+                if (isNaN(score_F)) {
+                    document.getElementById('warning_F').innerText = "请输入肺活量得分";
+                } else {
+                    document.getElementById('warning_F').innerText = "";
+                    document.getElementById('score_F').innerText = ""; // 清空之前的体测结果显示
+                }
+            } else {
+                let result_F = parseFloat(document.getElementById('F_result').value);
+                if (isNaN(result_F)) {
+                    document.getElementById('warning_F').innerText = "请输入肺活量体测结果";
+                } else {
+                    score_F = getScoreFromResult(result_F, ranges_F);
+                    document.getElementById('warning_F').innerText = "";
+                    document.getElementById('score_F').innerText = `肺活量成绩: ${score_F} 分`;
+                }
+            }
+
+
+            // 计算坐位体前屈得分
+            if (document.getElementById('Q_option').value === 'score') {
+                score_Q = parseFloat(document.getElementById('Q_score').value);
+                if (isNaN(score_Q)) {
+                    document.getElementById('warning_Q').innerText = "请输入坐位体前屈得分";
+                } else {
+                    document.getElementById('warning_Q').innerText = "";
+                    document.getElementById('score_Q').innerText = "";
+                }
+            } else {
+                let result_Q = parseFloat(document.getElementById('Q_result').value);
+                if (isNaN(result_Q)) {
+                    document.getElementById('warning_Q').innerText = "请输入坐位体前屈体测结果";
+                } else {
+                    score_Q = getScoreFromResult(result_Q, ranges_Q);
+                    document.getElementById('warning_Q').innerText = "";
+                    document.getElementById('score_Q').innerText = `坐位体前屈成绩: ${score_Q} 分`;
+                }
+            }
+
+            // 计算一分钟跳绳得分
+            if (document.getElementById('T_option').value === 'score') {
+                score_T = parseFloat(document.getElementById('T_score').value);
+                if (isNaN(score_T)) {
+                    document.getElementById('warning_T').innerText = "请输入跳绳得分";
+                } else {
+                    document.getElementById('warning_T').innerText = "";
+                    document.getElementById('score_T').innerText = "";
+                }
+            } else {
+                let result_T = parseFloat(document.getElementById('T_result').value);
+                if (isNaN(result_T)) {
+                    document.getElementById('warning_T').innerText = "请输入跳绳体测结果";
+                } else {
+                    // 获取基础分数的最小跳绳次数
+                    let baseScoreData = ranges_T.find(range => range.score === 100); // 找到100分的最小跳绳次数
+                    let baseJumps = baseScoreData ? baseScoreData.min : 100; // 例如 100分可能对应的最小跳绳次数为 baseJumps
+                    
+                    // 计算基础得分
+                    score_T = getScoreFromResult(result_T, ranges_T);
+
+                    // 如果用户输入的跳绳次数超过了基础分数对应的最小跳绳次数，开始计算额外加分
+                    if (result_T > baseJumps) {
+                        let extraJumps = result_T - baseJumps;
+                        let bonus = Math.floor(extraJumps / 2); // 每2次增加1分
+                        bonus = Math.min(bonus, 20); // 最多加20分
+                        score_T += bonus; // 加上额外加分
+                    }
+
+                    document.getElementById('warning_T').innerText = "";
+                    document.getElementById('score_T').innerText = `跳绳成绩: ${score_T} 分`;
+                }
+            }
+
+            // 计算仰卧起坐得分
+            if (document.getElementById('Z_option').value === 'score') {
+                score_Z = parseFloat(document.getElementById('Z_score').value);
+                if (isNaN(score_Z)) {
+                    document.getElementById('warning_Z').innerText = "请输入仰卧起坐得分";
+                } else {
+                    document.getElementById('warning_Z').innerText = "";
+                    document.getElementById('score_Z').innerText = "";
+                }
+            } else {
+                let result_Z = parseFloat(document.getElementById('Z_result').value);
+                if (isNaN(result_Z)) {
+                    document.getElementById('warning_Z').innerText = "请输入仰卧起坐体测结果";
+                } else {
+                    score_Z = getScoreFromResult(result_Z, ranges_Z);
+                    document.getElementById('warning_Z').innerText = "";
+                    document.getElementById('score_Z').innerText = `仰卧起坐成绩: ${score_Z} 分`;
+                }
+            }
+
+            // 计算50米跑得分
+            if (document.getElementById('P_option').value === 'score') {
+                score_P = parseFloat(document.getElementById('P_score').value);
+                if (isNaN(score_P)) {
+                    document.getElementById('warning_P').innerText = "请输入50米跑得分";
+                } else {
+                    document.getElementById('warning_P').innerText = "";
+                    document.getElementById('score_P').innerText = "";
+                }
+            } else {
+                let result_P = parseFloat(document.getElementById('P_result').value);
+                if (isNaN(result_P)) {
+                    document.getElementById('warning_P').innerText = "请输入50米跑体测结果";
+                } else {
+                    score_P = getScoreFromResult(result_P, ranges_P);
+                    document.getElementById('warning_P').innerText = "";
+                    document.getElementById('score_P').innerText = `50米跑成绩: ${score_P} 分`;
+                }
+            }
+
+            // 计算50米*8往返跑得分
+            if (document.getElementById('P8_option').value === 'score') {
+                score_P8 = parseFloat(document.getElementById('P8_score').value);
+                if (isNaN(score_P8)) {
+                    document.getElementById('warning_P8').innerText = "请输入50米*8往返跑得分";
+                } else {
+                    document.getElementById('warning_P8').innerText = "";
+                    document.getElementById('score_P8').innerText = "";
+                }
+            } else {
+                let result_P8 = parseFloat(document.getElementById('P8_result').value);
+                if (isNaN(result_P8)) {
+                    document.getElementById('warning_P8').innerText = "请输入50米*8往返跑体测结果";
+                } else {
+                    score_P8 = getScoreFromResult(result_P8, ranges_P8);
+                    document.getElementById('warning_P8').innerText = "";
+                    document.getElementById('score_P8').innerText = `50米*8往返跑成绩: ${score_P8} 分`;
+                }
+            }
+
+            // 计算总成绩
+            if (!isNaN(score_B) && !isNaN(score_F) && !isNaN(score_P) && !isNaN(score_Q) && !isNaN(score_T) && !isNaN(score_Z) && !isNaN(score_P8)) {
+                let totalScore = (score_B * 0.15 + score_F * 0.15 + score_P * 0.20 + score_Q * 0.10 + score_T * 0.10 + score_Z * 0.20 + score_P8 * 0.10);
+
+                // 创建计算过程字符串
+                 let calculationProcess = `(${score_B} * 0.15) + (${score_F} * 0.15)  + (${score_Q} * 0.10) + (${score_T} * 0.10) + (${score_Z} * 0.20) + (${score_P} * 0.20) + (${score_P8} * 0.10)`;
+                document.getElementById('result').innerHTML = `总成绩: ${totalScore.toFixed(2)}`;
+                document.getElementById('calculationProcess').innerHTML = `计算过程: ${calculationProcess}`;
+            } else {
+                document.getElementById('result').innerHTML = "请确保所有项目均已正确输入";
+            }
+        }
+    </script>
+</body>
+</html>
